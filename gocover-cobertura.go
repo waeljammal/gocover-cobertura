@@ -80,7 +80,7 @@ func convert(in io.Reader, out io.Writer, ignore *Ignore) error {
 		pkgMap[pkg.ID] = pkg
 	}
 
-	log.Printf("parsing profiles 2")
+	log.Printf("parsing profiles 2: %v -> %d", sources, len(sources))
 	coverage := Coverage{Sources: sources, Packages: nil, Timestamp: time.Now().UnixNano() / int64(time.Millisecond)}
 	if err := coverage.parseProfiles(profiles, pkgMap, ignore); err != nil {
 		log.Printf("error: %s", err.Error())
