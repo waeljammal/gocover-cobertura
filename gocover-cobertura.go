@@ -58,11 +58,13 @@ func main() {
 }
 
 func convert(in io.Reader, out io.Writer, ignore *Ignore) error {
+	fmt.Println("parsing profiles")
 	profiles, err := ParseProfiles(in, ignore)
 	if err != nil {
 		return err
 	}
 
+	fmt.Println("get packages")
 	pkgs, err := getPackages(profiles)
 	if err != nil {
 		return err
@@ -152,8 +154,10 @@ func (cov *Coverage) parseProfile(profile *Profile, pkgPkg *packages.Package, ig
 	if err != nil {
 		return err
 	}
+	fmt.Println("file: " + absFilePath)
 	data, err := ioutil.ReadFile(absFilePath)
 	if err != nil {
+		fmt.Println("error: " + err.Error())
 		return err
 	}
 
