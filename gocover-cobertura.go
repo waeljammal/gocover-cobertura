@@ -80,7 +80,6 @@ func convert(in io.Reader, out io.Writer, ignore *Ignore) error {
 		pkgMap[pkg.ID] = pkg
 	}
 
-	log.Printf("parsing profiles 2: %v -> %d", sources, len(sources))
 	coverage := Coverage{Sources: sources, Packages: nil, Timestamp: time.Now().UnixNano() / int64(time.Millisecond)}
 	if err := coverage.parseProfiles(profiles, pkgMap, ignore); err != nil {
 		log.Printf("error: %s", err.Error())
@@ -139,6 +138,7 @@ func (cov *Coverage) parseProfiles(profiles []*Profile, pkgMap map[string]*packa
 		pkgName := getPackageName(profile.FileName)
 		pkgPkg := pkgMap[pkgName]
 		if err := cov.parseProfile(profile, pkgPkg, ignore); err != nil {
+			log.Printf("error 2: %s", err.Error())
 			return err
 		}
 	}
@@ -157,6 +157,7 @@ func (cov *Coverage) parseProfile(profile *Profile, pkgPkg *packages.Package, ig
 	fset := token.NewFileSet()
 	parsed, err := parser.ParseFile(fset, absFilePath, nil, 0)
 	if err != nil {
+		log.Printf("err 3: %s -> %s", err.Error(), absFilePath)
 		return err
 	}
 	data, err := ioutil.ReadFile(absFilePath)
