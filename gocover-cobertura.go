@@ -60,7 +60,7 @@ func main() {
 }
 
 func convert(in io.Reader, out io.Writer, ignore *Ignore) error {
-	log.Printf("parsing profiles")
+	log.Printf("parsing profiles 1")
 	profiles, err := ParseProfiles(in, ignore)
 	if err != nil {
 		return err
@@ -69,6 +69,7 @@ func convert(in io.Reader, out io.Writer, ignore *Ignore) error {
 	log.Printf("get packages")
 	pkgs, err := getPackages(profiles)
 	if err != nil {
+		log.Printf("err: %s", err.Error())
 		return err
 	}
 
@@ -79,8 +80,10 @@ func convert(in io.Reader, out io.Writer, ignore *Ignore) error {
 		pkgMap[pkg.ID] = pkg
 	}
 
+	log.Printf("parsing profiles 2")
 	coverage := Coverage{Sources: sources, Packages: nil, Timestamp: time.Now().UnixNano() / int64(time.Millisecond)}
 	if err := coverage.parseProfiles(profiles, pkgMap, ignore); err != nil {
+		log.Printf("error: %s", err.Error())
 		return err
 	}
 
@@ -156,10 +159,8 @@ func (cov *Coverage) parseProfile(profile *Profile, pkgPkg *packages.Package, ig
 	if err != nil {
 		return err
 	}
-	log.Printf("file: %s", absFilePath)
 	data, err := ioutil.ReadFile(absFilePath)
 	if err != nil {
-		log.Printf("error: %s", err.Error())
 		return err
 	}
 
