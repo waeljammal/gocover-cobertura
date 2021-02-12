@@ -157,7 +157,7 @@ func (cov *Coverage) parseProfile(profile *Profile, pkgPkg *packages.Package, ig
 	fset := token.NewFileSet()
 	parsed, err := parser.ParseFile(fset, absFilePath, nil, 0)
 	if err != nil {
-		log.Printf("err 3: %s -> %s", err.Error(), absFilePath)
+		log.Printf("err 3: %s -> %s -> %s -> %s", err.Error(), absFilePath, pkgPkg, profile.FileName)
 		return err
 	}
 	data, err := ioutil.ReadFile(absFilePath)
